@@ -4,7 +4,7 @@ export function getCountry() {
   return fetch('https://extreme-ip-lookup.com/json/')
     .then(response => response.text())
     .then((response) => {
-      const result = response;
+      const result = JSON.parse(response);
 
       if (!result) {
         throw new Error('unable to fetch the country');

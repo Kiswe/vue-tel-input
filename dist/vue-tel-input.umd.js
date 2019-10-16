@@ -938,7 +938,7 @@
 	  return fetch('https://extreme-ip-lookup.com/json/').then(function (response) {
 	    return response.text();
 	  }).then(function (response) {
-	    var result = response;
+	    var result = JSON.parse(response);
 
 	    if (!result) {
 	      throw new Error('unable to fetch the country');
