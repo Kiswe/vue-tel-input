@@ -900,46 +900,6 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-// 21.2.5.3 get RegExp.prototype.flags
-
-var _flags = function () {
-  var that = _anObject(this);
-  var result = '';
-  if (that.global) result += 'g';
-  if (that.ignoreCase) result += 'i';
-  if (that.multiline) result += 'm';
-  if (that.unicode) result += 'u';
-  if (that.sticky) result += 'y';
-  return result;
-};
-
-// 21.2.5.3 get RegExp.prototype.flags()
-if (_descriptors && /./g.flags != 'g') _objectDp.f(RegExp.prototype, 'flags', {
-  configurable: true,
-  get: _flags
-});
-
-var TO_STRING = 'toString';
-var $toString = /./[TO_STRING];
-
-var define = function (fn) {
-  _redefine(RegExp.prototype, TO_STRING, fn, true);
-};
-
-// 21.2.5.14 RegExp.prototype.toString()
-if (_fails(function () { return $toString.call({ source: 'a', flags: 'b' }) != '/a/b'; })) {
-  define(function toString() {
-    var R = _anObject(this);
-    return '/'.concat(R.source, '/',
-      'flags' in R ? R.flags : !_descriptors && R instanceof RegExp ? _flags.call(R) : undefined);
-  });
-// FF44- RegExp#toString has a wrong name
-} else if ($toString.name != TO_STRING) {
-  define(function toString() {
-    return $toString.call(this);
-  });
-}
-
 // Array of country objects for the flag dropdown.
 // Here is the criteria for the plugin to support a given country/territory
 // - It has an iso2 code: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
@@ -972,13 +932,13 @@ function getCountry() {
   return fetch('https://extreme-ip-lookup.com/json/').then(function (response) {
     return response.text();
   }).then(function (response) {
-    var result = (response || '').toString();
+    var result = response;
 
-    if (!result || result[0] !== '1') {
+    if (!result) {
       throw new Error('unable to fetch the country');
     }
 
-    return result.substr(2, 2);
+    return result.countryCode;
   });
 } // Credits: http://blog.vishalon.net/index.php/javascript-getting-and-setting-caret-position-in-textarea/
 

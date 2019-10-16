@@ -4,13 +4,13 @@ export function getCountry() {
   return fetch('https://extreme-ip-lookup.com/json/')
     .then(response => response.text())
     .then((response) => {
-      const result = (response || '').toString();
+      const result = response;
 
-      if (!result || result[0] !== '1') {
+      if (!result) {
         throw new Error('unable to fetch the country');
       }
 
-      return result.substr(2, 2);
+      return result.countryCode;
     });
 }
 
